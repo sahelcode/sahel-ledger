@@ -256,7 +256,8 @@ abstract final class LedgerInvariants {
     for (final l in lines) {
       if (l.amount == 0) return 'zero-amount line';
       if (l.amount.abs() > 9007199254740991) return 'amount out of range';
-      if (l.accountId.isEmpty || l.fundId.isEmpty) return 'missing account/fund';
+      if (l.accountId.isEmpty || l.fundId.isEmpty)
+        return 'missing account/fund';
       total += l.amount;
       perFund[l.fundId] = (perFund[l.fundId] ?? 0) + l.amount;
     }
@@ -413,12 +414,7 @@ class PostingEngine {
     }
 
     if (errors.isNotEmpty) {
-      return PostingPlan(
-        const [],
-        errors,
-        personId: personId,
-        fundId: fundId,
-      );
+      return PostingPlan(const [], errors, personId: personId, fundId: fundId);
     }
 
     final lines = _build(input, amount!, fundId!, personId);
@@ -427,7 +423,8 @@ class PostingEngine {
   }
 
   static ObligationKind? _obligationKindFor(TxType t) => switch (t) {
-    TxType.loanGiven || TxType.loanRepaymentReceived => ObligationKind.loanGiven,
+    TxType.loanGiven ||
+    TxType.loanRepaymentReceived => ObligationKind.loanGiven,
     TxType.loanTaken || TxType.loanRepaymentPaid => ObligationKind.loanTaken,
     TxType.advancePaid ||
     TxType.reimbursementReceived => ObligationKind.advance,

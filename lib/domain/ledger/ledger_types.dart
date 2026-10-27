@@ -160,11 +160,8 @@ enum TxType {
 
   /// Pure movements between the user's own accounts or funds. These are
   /// excluded from income/expense reporting to avoid double counting.
-  bool get isInternalMovement => const {
-    transfer,
-    interFundLoan,
-    interFundRepayment,
-  }.contains(this);
+  bool get isInternalMovement =>
+      const {transfer, interFundLoan, interFundRepayment}.contains(this);
 }
 
 enum ObligationKind {

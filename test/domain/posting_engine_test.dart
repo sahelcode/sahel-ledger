@@ -33,9 +33,21 @@ class Fixture {
   final accounts = <AccountRef>[
     for (final id in [bankA, bankB, cash, bkash, nagad])
       AccountRef(id, LedgerAccountKind.storage, AccountClass.asset),
-    const AccountRef(salary, LedgerAccountKind.incomeCategory, AccountClass.income),
-    const AccountRef(gift, LedgerAccountKind.incomeCategory, AccountClass.income),
-    const AccountRef(food, LedgerAccountKind.expenseCategory, AccountClass.expense),
+    const AccountRef(
+      salary,
+      LedgerAccountKind.incomeCategory,
+      AccountClass.income,
+    ),
+    const AccountRef(
+      gift,
+      LedgerAccountKind.incomeCategory,
+      AccountClass.income,
+    ),
+    const AccountRef(
+      food,
+      LedgerAccountKind.expenseCategory,
+      AccountClass.expense,
+    ),
     const AccountRef(
       education,
       LedgerAccountKind.expenseCategory,
@@ -106,7 +118,10 @@ void main() {
       expect(p.storage(Fixture.bankA), tk(50000));
       expect(p.fundNet(Fixture.sisterFund), tk(50000));
       expect(p.fundNet(Fixture.personal), 0, reason: 'not my money');
-      expect(p.capitalByFundPerson[(Fixture.sisterFund, Fixture.sister)], tk(50000));
+      expect(
+        p.capitalByFundPerson[(Fixture.sisterFund, Fixture.sister)],
+        tk(50000),
+      );
       expect(p.incomeTotal, 0, reason: 'entrusted money is not income');
     });
 
@@ -287,7 +302,11 @@ void main() {
       var p = f.position;
       expect(p.expenseTotal, 0);
       expect(p.loansReceivableByPerson[Fixture.friend], tk(5000));
-      expect(p.fundNet(Fixture.personal), tk(20000), reason: 'net worth unchanged');
+      expect(
+        p.fundNet(Fixture.personal),
+        tk(20000),
+        reason: 'net worth unchanged',
+      );
       f.post(
         TxInput(
           type: TxType.loanRepaymentReceived,
@@ -357,43 +376,53 @@ void main() {
       final p = f.position;
       expect(p.loansPayableByPerson[Fixture.uncle], tk(5000));
       expect(p.storage(Fixture.bankA), tk(5000));
-      expect(p.fundNet(Fixture.personal), 0, reason: 'borrowed money is not wealth');
+      expect(
+        p.fundNet(Fixture.personal),
+        0,
+        reason: 'borrowed money is not wealth',
+      );
     });
 
-    test('paying for someone else creates an advance; reimbursement clears it', () {
-      f.post(
-        TxInput(
-          type: TxType.openingBalance,
-          amount: tk(5000),
-          toAccountId: Fixture.cash,
-          fundId: Fixture.personal,
-        ),
-      );
-      f.post(
-        TxInput(
-          type: TxType.advancePaid,
-          amount: tk(3000),
-          fromAccountId: Fixture.cash,
-          fundId: Fixture.personal,
-          personId: Fixture.brother,
-        ),
-      );
-      expect(f.position.advancesReceivableByPerson[Fixture.brother], tk(3000));
-      expect(f.position.expenseTotal, 0);
-      f.post(
-        TxInput(
-          type: TxType.reimbursementReceived,
-          amount: tk(3000),
-          toAccountId: Fixture.nagad,
-          fundId: Fixture.personal,
-          personId: Fixture.brother,
-        ),
-      );
-      final p = f.position;
-      expect(p.advancesReceivableByPerson[Fixture.brother], 0);
-      expect(p.storage(Fixture.nagad), tk(3000));
-      expect(p.fundNet(Fixture.personal), tk(5000));
-    });
+    test(
+      'paying for someone else creates an advance; reimbursement clears it',
+      () {
+        f.post(
+          TxInput(
+            type: TxType.openingBalance,
+            amount: tk(5000),
+            toAccountId: Fixture.cash,
+            fundId: Fixture.personal,
+          ),
+        );
+        f.post(
+          TxInput(
+            type: TxType.advancePaid,
+            amount: tk(3000),
+            fromAccountId: Fixture.cash,
+            fundId: Fixture.personal,
+            personId: Fixture.brother,
+          ),
+        );
+        expect(
+          f.position.advancesReceivableByPerson[Fixture.brother],
+          tk(3000),
+        );
+        expect(f.position.expenseTotal, 0);
+        f.post(
+          TxInput(
+            type: TxType.reimbursementReceived,
+            amount: tk(3000),
+            toAccountId: Fixture.nagad,
+            fundId: Fixture.personal,
+            personId: Fixture.brother,
+          ),
+        );
+        final p = f.position;
+        expect(p.advancesReceivableByPerson[Fixture.brother], 0);
+        expect(p.storage(Fixture.nagad), tk(3000));
+        expect(p.fundNet(Fixture.personal), tk(5000));
+      },
+    );
   });
 
   group('samity', () {
@@ -419,7 +448,10 @@ void main() {
       var p = f.position;
       expect(p.fundNet(Fixture.samityFund), tk(2000));
       expect(p.fundNet(Fixture.personal), 0);
-      expect(p.capitalByFundPerson[(Fixture.samityFund, Fixture.member2)], tk(1000));
+      expect(
+        p.capitalByFundPerson[(Fixture.samityFund, Fixture.member2)],
+        tk(1000),
+      );
       f.post(
         TxInput(
           type: TxType.samityPayout,
@@ -431,7 +463,10 @@ void main() {
       );
       p = f.position;
       expect(p.fundNet(Fixture.samityFund), 0);
-      expect(p.capitalByFundPerson[(Fixture.samityFund, Fixture.member2)], -tk(1000));
+      expect(
+        p.capitalByFundPerson[(Fixture.samityFund, Fixture.member2)],
+        -tk(1000),
+      );
     });
 
     test('external samity: my contribution remains my asset', () {
@@ -501,8 +536,16 @@ void main() {
         ),
       );
       var p = f.position;
-      expect(p.fundNet(Fixture.sisterFund), tk(50000), reason: 'sister still owed all');
-      expect(p.fundNet(Fixture.personal), -tk(10000), reason: 'I owe my sister');
+      expect(
+        p.fundNet(Fixture.sisterFund),
+        tk(50000),
+        reason: 'sister still owed all',
+      );
+      expect(
+        p.fundNet(Fixture.personal),
+        -tk(10000),
+        reason: 'I owe my sister',
+      );
       expect(p.storage(Fixture.bankA), tk(40000));
       expect(p.storageInFund(Fixture.bankA, Fixture.sisterFund), tk(40000));
       f.post(
@@ -534,7 +577,9 @@ void main() {
 
   group('drafts, reversal and adjustments', () {
     test('missing facts produce errors instead of guesses', () {
-      final plan = f.engine.plan(const TxInput(type: TxType.expense, amount: 500));
+      final plan = f.engine.plan(
+        const TxInput(type: TxType.expense, amount: 500),
+      );
       expect(plan.isComplete, isFalse);
       expect(plan.lines, isEmpty);
       expect(
