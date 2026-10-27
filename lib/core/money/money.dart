@@ -69,8 +69,9 @@ MoneyParseResult parsePoisha(String raw, {bool allowZero = false}) {
   }
   if (text.startsWith('+')) text = text.substring(1);
   final match = RegExp(r'^(\d*)(?:\.(\d*))?$').firstMatch(text);
-  if (match == null)
+  if (match == null) {
     return const MoneyParseResult.fail(MoneyParseError.invalid);
+  }
   final whole = match.group(1) ?? '';
   final frac = match.group(2) ?? '';
   if (whole.isEmpty && frac.isEmpty) {

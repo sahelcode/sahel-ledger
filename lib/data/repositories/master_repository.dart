@@ -268,8 +268,9 @@ class MasterRepository {
       final f = await (db.select(
         db.funds,
       )..where((x) => x.id.equals(id))).getSingle();
-      if (f.kind == FundKind.personal)
+      if (f.kind == FundKind.personal) {
         throw LedgerStateException('personal_fund');
+      }
       await (db.update(db.funds)..where((x) => x.id.equals(id))).write(
         FundsCompanion(
           archived: Value(archived),

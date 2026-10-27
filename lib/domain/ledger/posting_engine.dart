@@ -256,8 +256,9 @@ abstract final class LedgerInvariants {
     for (final l in lines) {
       if (l.amount == 0) return 'zero-amount line';
       if (l.amount.abs() > 9007199254740991) return 'amount out of range';
-      if (l.accountId.isEmpty || l.fundId.isEmpty)
+      if (l.accountId.isEmpty || l.fundId.isEmpty) {
         return 'missing account/fund';
+      }
       total += l.amount;
       perFund[l.fundId] = (perFund[l.fundId] ?? 0) + l.amount;
     }

@@ -513,17 +513,20 @@ class LedgerRepository {
     TxDraft? replacement,
   }) async {
     actor.require(Permission.reverseTransactions);
-    if (reason.trim().isEmpty)
+    if (reason.trim().isEmpty) {
       throw TxValidationException({'reason': PostingError.required});
+    }
     return db.transaction(() async {
       final orig = await getWithLines(id);
       if (orig == null || orig.tx.status != TxStatus.posted) {
         throw LedgerStateException('not_posted');
       }
-      if (orig.tx.reversedByTxId != null)
+      if (orig.tx.reversedByTxId != null) {
         throw LedgerStateException('already_reversed');
-      if (orig.tx.type == TxType.reversal)
+      }
+      if (orig.tx.type == TxType.reversal) {
         throw LedgerStateException('reverse_reversal');
+      }
       final revId = const Uuid().v4();
       final t = orig.tx;
       final lines = PostingEngine.buildReversal(orig.specs);
@@ -570,8 +573,9 @@ class LedgerRepository {
         details: {'reversal': revId, 'reason': reason.trim()},
       );
       await outbox.enqueue('tx', id);
-      if (t.obligationId != null)
+      if (t.obligationId != null) {
         await _refreshObligationStatus(t.obligationId!);
+      }
       if (replacement != null) {
         final plan = PostingEngine(await loadLookup()).plan(replacement.input);
         if (!plan.isComplete) throw TxValidationException(plan.errors);
@@ -700,12 +704,15 @@ class LedgerRepository {
   SimpleSelectStatement<$LedgerTransactionsTable, TxRow> _filtered(TxFilter f) {
     final q = db.select(db.ledgerTransactions);
     q.where((t) => t.status.isNotValue(TxStatus.staging.name));
-    if (f.fromDate != null)
+    if (f.fromDate != null) {
       q.where((t) => t.dateKey.isBiggerOrEqualValue(f.fromDate!));
-    if (f.toDate != null)
+    }
+    if (f.toDate != null) {
       q.where((t) => t.dateKey.isSmallerOrEqualValue(f.toDate!));
-    if (f.types != null)
+    }
+    if (f.types != null) {
       q.where((t) => t.type.isIn(f.types!.map((e) => e.name)));
+    }
     if (f.statuses != null) {
       q.where((t) => t.status.isIn(f.statuses!.map((e) => e.name)));
     }
@@ -720,10 +727,12 @@ class LedgerRepository {
             ),
       );
     }
-    if (f.categoryId != null)
+    if (f.categoryId != null) {
       q.where((t) => t.categoryId.equals(f.categoryId!));
-    if (f.obligationId != null)
+    }
+    if (f.obligationId != null) {
       q.where((t) => t.obligationId.equals(f.obligationId!));
+    }
     if (f.samityId != null) q.where((t) => t.samityId.equals(f.samityId!));
     if (f.accountId != null) {
       final a = f.accountId!;

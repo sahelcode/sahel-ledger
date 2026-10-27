@@ -117,8 +117,9 @@ class BackupService {
       throw BackupException('older_schema_unsupported');
     }
     final tables = decoded['tables'];
-    if (tables is! Map<String, Object?>)
+    if (tables is! Map<String, Object?>) {
       throw BackupException('missing_tables');
+    }
     if (sha256Hex(canonicalJson(tables)) != decoded['checksum']) {
       throw BackupException('checksum_mismatch');
     }
@@ -155,8 +156,9 @@ class BackupService {
         for (final t in tableOrder) {
           for (final raw in tables[t]! as List) {
             final row = Map<String, Object?>.from(raw as Map);
-            if (t == 'key_values' && _deviceLocalKeys.contains(row['key']))
+            if (t == 'key_values' && _deviceLocalKeys.contains(row['key'])) {
               continue;
+            }
             final cols = row.keys.toList();
             await db.customInsert(
               'INSERT INTO $t (${cols.join(', ')}) VALUES (${List.filled(cols.length, '?').join(', ')})',
@@ -185,8 +187,9 @@ class BackupService {
 
   Future<void> _verify() async {
     final fk = await db.customSelect('PRAGMA foreign_key_check').get();
-    if (fk.isNotEmpty)
+    if (fk.isNotEmpty) {
       throw BackupException('foreign_keys', '${fk.first.data}');
+    }
     final unbalanced = await db.customSelect('''
         SELECT t.id FROM ledger_transactions t
         LEFT JOIN transaction_lines l ON l.tx_id = t.id
