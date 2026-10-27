@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../app/providers.dart';
 import '../../app/strings.dart';
@@ -141,6 +142,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           onPressed: () => setState(() => _step = 1),
           child: Text(s.getStarted),
         ),
+        if (ref.watch(firebaseReadyProvider)) ...[
+          const SizedBox(height: Space.sm),
+          TextButton(
+            onPressed: () async {
+              // A second device or an invited member: take everything from
+              // the household instead of seeding a new personal ledger.
+              await ref.read(masterRepoProvider).completeOnboardingForJoin();
+              ref.read(settingsProvider.notifier).markOnboarded();
+              if (mounted) GoRouter.of(context).go('/household');
+            },
+            child: Text(s.joinExisting),
+          ),
+        ],
       ],
     );
   }

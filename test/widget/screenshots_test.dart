@@ -15,10 +15,12 @@ import 'package:sahel_ledger/app/app.dart';
 import 'package:sahel_ledger/app/providers.dart';
 import 'package:sahel_ledger/app/router.dart';
 import 'package:sahel_ledger/data/db/database.dart';
+import 'package:sahel_ledger/features/lock/app_lock.dart';
 import 'package:sahel_ledger/domain/ledger/ledger_types.dart';
 import 'package:sahel_ledger/domain/ledger/posting_engine.dart';
 
 import '../support/fonts.dart';
+import '../support/memory_secret_store.dart';
 import '../support/test_ledger.dart';
 
 final _dir = Platform.environment['SCREENSHOT_DIR'];
@@ -155,6 +157,7 @@ void main() {
           overrides: [
             databaseProvider.overrideWithValue(db),
             initialSettingsProvider.overrideWithValue(settings),
+            secretStoreProvider.overrideWithValue(MemorySecretStore()),
           ],
         );
         await tester.pumpWidget(

@@ -121,6 +121,17 @@ class MasterRepository {
     });
   }
 
+  /// Setup for a device that joins an existing household (a second phone
+  /// or an invited member): nothing is seeded locally, everything arrives
+  /// through sync. Seeding here would create a duplicate personal fund.
+  Future<void> completeOnboardingForJoin() async {
+    await db.transaction(() async {
+      if (await isOnboarded()) return;
+      await db.setKv(Kv.deviceId, (await db.getKv(Kv.deviceId)) ?? _id());
+      await db.setKv(Kv.onboarded, 'true');
+    });
+  }
+
   Future<String?> selfPersonId() => db.getKv(Kv.selfPersonId);
   Future<String?> personalFundId() => db.getKv(Kv.personalFundId);
 

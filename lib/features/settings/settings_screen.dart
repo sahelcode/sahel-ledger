@@ -18,6 +18,7 @@ import '../../data/repositories/reports_repository.dart';
 import '../../domain/access/access.dart';
 import '../../domain/ledger/ledger_types.dart';
 import '../../shared/widgets.dart';
+import '../lock/app_lock.dart';
 import '../sync/sync_controller.dart';
 
 final _lastBackupProvider = FutureProvider.autoDispose<String?>(
@@ -94,6 +95,8 @@ class SettingsScreen extends ConsumerWidget {
             onSelectionChanged: (v) =>
                 ref.read(settingsProvider.notifier).setThemeMode(v.first),
           ),
+          SectionHeader(s.appLock),
+          const _AppLockTile(),
           SectionHeader(s.syncTitle),
           AppCard(
             child: Column(
@@ -449,6 +452,34 @@ class AuditScreen extends ConsumerWidget {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class _AppLockTile extends ConsumerWidget {
+  const _AppLockTile();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = S.of(context);
+    final lock = ref.watch(appLockProvider);
+    return AppCard(
+      padding: EdgeInsets.zero,
+      child: SwitchListTile(
+        value: lock.enabled,
+        title: Text(s.appLock),
+        subtitle: Text(s.appLockHint),
+        onChanged: (on) async {
+          if (!on) return ref.read(appLockProvider.notifier).disable();
+          final pin = await promptText(context, title: s.setPin, minLength: 4);
+          if (pin == null) return;
+          if (!RegExp(r'^\d{4,8}$').hasMatch(pin)) {
+            if (context.mounted) showSnack(context, s.setPin, error: true);
+            return;
+          }
+          await ref.read(appLockProvider.notifier).setPin(pin);
+        },
       ),
     );
   }

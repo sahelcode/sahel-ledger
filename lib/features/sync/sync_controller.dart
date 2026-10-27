@@ -117,6 +117,12 @@ class SyncController extends Notifier<SyncState> {
 
   /// A device that joined a household learns its personal fund from data.
   Future<void> _ensureLocalKeys(AppDatabase db) async {
+    if (await db.getKv(Kv.selfPersonId) == null) {
+      final self = await (db.select(
+        db.persons,
+      )..where((p) => p.isSelf.equals(true))).getSingleOrNull();
+      if (self != null) await db.setKv(Kv.selfPersonId, self.id);
+    }
     if (await db.getKv(Kv.personalFundId) != null) return;
     final personal = await (db.select(
       db.funds,

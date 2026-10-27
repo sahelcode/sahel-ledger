@@ -379,6 +379,29 @@ void main() {
     expect(local.name, 'Karim Bhai', reason: 'local edit kept for review');
   });
 
+  test(
+    'a joining device seeds nothing and ends with one personal fund',
+    () async {
+      await a.income(tk(100));
+      await engineFor(a.db, owner).syncNow();
+      final joined = openTestDb();
+      addTearDown(joined.close);
+      await MasterRepository(
+        joined,
+        actor: ownerActor,
+      ).completeOnboardingForJoin();
+      expect(await joined.select(joined.funds).get(), isEmpty);
+      expect(await joined.select(joined.persons).get(), isEmpty);
+      final r = await engineFor(joined, owner).syncNow();
+      expect(r.clean, isTrue, reason: '${r.errors}');
+      final personal = (await joined.select(joined.funds).get()).where(
+        (f) => f.kind == FundKind.personal,
+      );
+      expect(personal.map((f) => f.id), [a.personal]);
+      expect(await outboxSize(joined), 0, reason: 'nothing local to upload');
+    },
+  );
+
   test('write decisions', () {
     final base = {
       'contentHash': 'h',

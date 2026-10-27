@@ -184,6 +184,10 @@ class S {
     'পোস্ট করা লেনদেন কখনো গোপনে বদলায় না',
   );
   String get getStarted => _('Get started', 'শুরু করুন');
+  String get joinExisting => _(
+    'I already have a household (second phone or invitation)',
+    'আমার পরিবার আগে থেকেই আছে (দ্বিতীয় ফোন বা আমন্ত্রণ)',
+  );
   String get yourName => _('Your name', 'আপনার নাম');
   String get openingCash => _('Cash in hand now', 'এখন হাতে নগদ কত আছে');
   String get openingCashHint => _(
@@ -741,6 +745,19 @@ class S {
     'Account recovery: reset your password by email. Keep a local backup too — it restores everything even without the cloud.',
     'অ্যাকাউন্ট পুনরুদ্ধার: ইমেইলে পাসওয়ার্ড রিসেট করুন। লোকাল ব্যাকআপও রাখুন — ক্লাউড ছাড়াই সব ফিরিয়ে আনা যায়।',
   );
+
+  // ------------------------------------------------------------------ lock
+  String get appLock => _('App lock (PIN)', 'অ্যাপ লক (পিন)');
+  String get appLockHint => _(
+    'Asks for a PIN when the app opens or returns after 2 minutes.',
+    'অ্যাপ খুললে বা ২ মিনিট পর ফিরে এলে পিন চাইবে।',
+  );
+  String get pin => _('PIN', 'পিন');
+  String get setPin => _('Set a 4–8 digit PIN', '৪–৮ সংখ্যার পিন দিন');
+  String get wrongPin => _('Wrong PIN', 'ভুল পিন');
+  String get tryLater =>
+      _('Too many attempts — wait a moment', 'অনেকবার ভুল — একটু অপেক্ষা করুন');
+  String get unlock => _('Unlock', 'খুলুন');
 
   // -------------------------------------------------------------- settings
   String get settingsTitle => _('Settings', 'সেটিংস');

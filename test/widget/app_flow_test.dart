@@ -4,9 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sahel_ledger/app/app.dart';
 import 'package:sahel_ledger/app/providers.dart';
 import 'package:sahel_ledger/data/db/database.dart';
+import 'package:sahel_ledger/features/lock/app_lock.dart';
 import 'package:sahel_ledger/domain/ledger/ledger_types.dart';
 
 import '../support/fonts.dart';
+import '../support/memory_secret_store.dart';
 import '../support/test_ledger.dart';
 
 /// Lets real async work (SQLite queries) finish between frames. Used
@@ -37,6 +39,7 @@ void main() {
         overrides: [
           databaseProvider.overrideWithValue(db),
           initialSettingsProvider.overrideWithValue(settings),
+          secretStoreProvider.overrideWithValue(MemorySecretStore()),
         ],
         child: const SahelLedgerApp(),
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/lock/app_lock.dart';
 import '../features/sync/sync_controller.dart';
 import 'providers.dart';
 import 'router.dart';
@@ -29,6 +30,7 @@ class SahelLedgerApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       routerConfig: ref.watch(routerProvider),
+      builder: (context, child) => LockGate(child: child ?? const SizedBox()),
     );
   }
 }
