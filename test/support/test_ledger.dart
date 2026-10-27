@@ -123,3 +123,12 @@ class TestLedger {
     date: date,
   );
 }
+
+abstract final class TestLedgerSeed {
+  /// Completes onboarding directly in the database.
+  static Future<void> onboard(AppDatabase db, {int cash = 0}) =>
+      MasterRepository(
+        db,
+        actor: ActorContext.localOwner,
+      ).completeOnboarding(selfName: 'Sahel', openingCash: cash);
+}

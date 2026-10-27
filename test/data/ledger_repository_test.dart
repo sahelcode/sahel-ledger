@@ -525,7 +525,7 @@ void main() {
       expect(s.totalDebit, tk(50));
       expect(s.totalCredit, tk(125));
       expect(s.closing, tk(925));
-      expect(s.rows.first.counterAccountName, 'Food & groceries');
+      expect(s.rows.first.counterAccountId, 'cat.exp.food');
     });
 
     test(

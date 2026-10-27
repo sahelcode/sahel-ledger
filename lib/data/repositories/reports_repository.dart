@@ -96,6 +96,17 @@ class StatementSpec {
   final String id;
   final int? from;
   final int? to;
+
+  @override
+  bool operator ==(Object other) =>
+      other is StatementSpec &&
+      other.kind == kind &&
+      other.id == id &&
+      other.from == from &&
+      other.to == to;
+
+  @override
+  int get hashCode => Object.hash(kind, id, from, to);
 }
 
 class StatementRow {
@@ -109,7 +120,7 @@ class StatementRow {
     required this.running,
     required this.reversed,
     this.personId,
-    this.counterAccountName,
+    this.counterAccountId,
   });
 
   final String txId;
@@ -125,7 +136,9 @@ class StatementRow {
   final int running;
   final bool reversed;
   final String? personId;
-  final String? counterAccountName;
+
+  /// The main other account of the entry (category or account), for display.
+  final String? counterAccountId;
 }
 
 class Statement {
@@ -501,7 +514,7 @@ class ReportsRepository {
           '''SELECT t.id AS id, t.date_key AS d, t.type AS type, t.description AS descr,
                     t.person_id AS person, t.reversed_by_tx_id AS rev,
                     SUM(l.amount) AS amt,
-                    (SELECT a2.name FROM transaction_lines l2
+                    (SELECT a2.id FROM transaction_lines l2
                        JOIN ledger_accounts a2 ON a2.id = l2.account_id
                      WHERE l2.tx_id = t.id AND NOT (${where.replaceAll('l.', 'l2.').replaceAll('a.', 'a2.')})
                      ORDER BY ABS(l2.amount) DESC LIMIT 1) AS counter
@@ -539,7 +552,7 @@ class ReportsRepository {
           running: running,
           reversed: r.readNullable<String>('rev') != null,
           personId: r.readNullable<String>('person'),
-          counterAccountName: r.readNullable<String>('counter'),
+          counterAccountId: r.readNullable<String>('counter'),
         ),
       );
     }
