@@ -1,0 +1,149 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "transactions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "readerUids",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "updatedAtServer",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "persons",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "readerUids",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "updatedAtServer",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "funds",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "readerUids",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "updatedAtServer",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "accounts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "readerUids",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "updatedAtServer",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "obligations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "readerUids",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "updatedAtServer",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "samities",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "readerUids",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "updatedAtServer",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "budgets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "readerUids",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "updatedAtServer",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "recon",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "readerUids",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "updatedAtServer",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

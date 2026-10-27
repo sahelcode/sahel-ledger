@@ -1,0 +1,11 @@
+rules_version = '2';
+
+// Receipt attachments are kept on-device in this version; cloud upload is
+// not implemented. Deny everything until a reviewed design ships.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
